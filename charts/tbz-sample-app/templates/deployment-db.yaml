@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: staging-tbz-sample-app-db
+  labels:
+    app.kubernetes.io/name: tbz-sample-app
+    app.kubernetes.io/component: db
+    app.kubernetes.io/instance: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tbz-sample-app
+      app.kubernetes.io/component: db
+      app.kubernetes.io/instance: staging
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tbz-sample-app
+        app.kubernetes.io/component: db
+        app.kubernetes.io/instance: staging
+    spec:
+      serviceAccountName: staging-tbz-sample-app
+      containers:
+        - name: postgres
+          image: "docker.io/library/postgres:latest"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: POSTGRES_DB
+              value: "magic-library-prod"
+            - name: POSTGRES_USER
+              value: "magic-library-prod"
+            - name: POSTGRES_PASSWORD
+              value: "N3U684dCm6tG"
+          resources:
+            limits:
+              cpu: "1"
+              memory: "512Mi"
+          ports:
+            - name: postgres
+              containerPort: 5432
+              protocol: TCP

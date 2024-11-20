@@ -1,0 +1,26 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: staging-tbz-sample-app-web
+  labels:
+    app.kubernetes.io/name: tbz-sample-app
+    app.kubernetes.io/component: web
+    app.kubernetes.io/instance: staging
+spec:
+  ingressClassName: cilium
+  rules:
+  - host: sample-app-staging.example.test
+    http:
+      paths:
+      - backend:
+          service:
+            name: staging-tbz-sample-app-web
+            port:
+              name: http
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - sample-app-staging.example.test
+    secretName: staging-tbz-sample-app-web-tls

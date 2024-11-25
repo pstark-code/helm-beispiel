@@ -1,0 +1,57 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-web
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/component: web
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Chart.Name }}
+      app.kubernetes.io/component: web
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Chart.Name }}
+        app.kubernetes.io/component: web
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ .Release.Name }}-{{ .Chart.Name }}
+      containers:
+        - name: web
+          image: "{{ .Values.web.deployment.image.repository }}:{{ .Values.web.deployment.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: ADMINER_DEFAULT_DRIVER
+              value: "{{ .Values.web.database.driver }}"
+            - name: ADMINER_DEFAULT_SERVER
+              value: "{{ .Values.web.database.host }}"
+            - name: ADMINER_DEFAULT_USER
+              value: "{{ .Values.web.database.user }}"
+            - name: ADMINER_DEFAULT_PASSWORD
+              value: "{{ .Values.web.database.password }}"
+            - name: ADMINER_DEFAULT_DB
+              value: "{{ .Values.web.database.name }}"
+            - name: ADMINER_DEFAULT_PORT
+              value: "{{ .Values.db.service.portNumber }}"
+          resources:
+            limits:
+              cpu: "1"
+              memory: "512Mi"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http

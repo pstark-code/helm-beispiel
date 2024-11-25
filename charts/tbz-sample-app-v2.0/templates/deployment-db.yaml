@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-db
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/component: db
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Chart.Name }}
+      app.kubernetes.io/component: db
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Chart.Name }}
+        app.kubernetes.io/component: db
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ .Release.Name }}-{{ .Chart.Name }}
+      containers:
+        - name: postgres
+          image: "{{ .Values.db.deployment.image.repository }}:{{ .Values.db.deployment.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: POSTGRES_DB
+              value: "{{ .Values.web.database.name }}"
+            - name: POSTGRES_USER
+              value: "{{ .Values.web.database.user }}"
+            - name: POSTGRES_PASSWORD
+              value: "{{ .Values.web.database.password }}"
+          resources:
+            limits:
+              cpu: "1"
+              memory: "512Mi"
+          ports:
+            - name: postgres
+              containerPort: 5432
+              protocol: TCP

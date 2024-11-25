@@ -9,10 +9,21 @@ Die Sektionen unten korrespondieren mit den Chart Versionen im `./charts` Ordner
 
 ## Helm CLI Benutzen
 
+### Template Rendern
+
+Um zu sehen, was bei einer Helm-Chart herauskommt, wenn sie installiert würde, können wir die Helm Chart auch nur "rendern", also dass alle Ersetzungen vorgenommen werden, die resultierenden YAML Dokumente aber *nicht* an Kubernetes übermittelt werden:
+
+```shell
+helm template -n namespace --values=./environments/values-staging.yaml beispiel-releasename ./charts/tbz-sample-app
+```
+
+
+### Installieren
+
 Eine Helm Chart kann mit dem folgenden Befehl installiert werden:
 
-```
-helm install --namespace=beispiel-namespace beispiel-releasename ./charts/tbz-sample-app
+```shell
+helm install --namespace=beispiel-namespace ./charts/tbz-sample-app --values=./environments/values-prod.yaml 
 ```
 
 - Der namespace mit der `--namespace` oder `-n` Option angegeben. 
@@ -20,13 +31,13 @@ helm install --namespace=beispiel-namespace beispiel-releasename ./charts/tbz-sa
 
 In den meisten Fällen reichen die Default-Values nicht aus um die Helm-Chart installieren zu können. Es kann mit `--values` oder `-f` ein eigenes Values-File angegeben werden:
 
-```
+```shell
 helm install -n namespace --values=./environments/values-staging.yaml beispiel-releasename ./charts/tbz-sample-app
 ```
 
 Um ein existierendes Deployment anzupassen, wird `helm upgrade` verwendet. Für eine vereinfachte Benutzung kann `--install` angegeben werden um `helm install` und `helm upgrade` zu kombinieren. In den meisten Fällen ist dies der einzige Befehl der regelmässig eingesetzt wird:
 
-```
+```shell
 helm upgrade --install -n namespace --values=./environments/values-staging.yaml beispiel-releasename ./charts/tbz-sample-app
 ```
 
@@ -34,7 +45,7 @@ helm upgrade --install -n namespace --values=./environments/values-staging.yaml 
 
 Ihr könnt eine der Beispiel Helm-Charts aus diesem Repository kopieren und für euch anpassen oder ihr könnt mit der Helm CLI eine neue Chart generieren:
 
-```
+```shell
 helm create CHART_NAME
 ```
 

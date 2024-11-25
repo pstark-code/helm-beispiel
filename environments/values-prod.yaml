@@ -1,3 +1,22 @@
 
+web:
+
+  ingress:
+    ingressClassName: cilium
+    hostname: sample-app-production.example.com
+    issuerKind: ClusterIssuer
+    issuerName: acme-issuer
+
+  database:
+    name: "sample-app"
+    user: "sample-user"
+    password: "very-long-password"
+    host: "production.postgres.example.com"
+    driver: "pgsql"
+
+  deployment: 
+    image:
+      tag: "production"
+
 db:
   enabled: false

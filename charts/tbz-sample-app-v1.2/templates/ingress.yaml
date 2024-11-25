@@ -1,0 +1,26 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-web
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/component: web
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  ingressClassName: cilium
+  rules:
+  - host: sample-app-{{ .Release.Name }}.example.test
+    http:
+      paths:
+      - backend:
+          service:
+            name: {{ .Release.Name }}-{{ .Chart.Name }}-web
+            port:
+              name: http
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - sample-app-{{ .Release.Name }}.example.test
+    secretName: {{ .Release.Name }}-{{ .Chart.Name }}-web-tls

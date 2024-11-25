@@ -1,0 +1,57 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-tbz-sample-app-web
+  labels:
+    app.kubernetes.io/name: tbz-sample-app
+    app.kubernetes.io/component: web
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tbz-sample-app
+      app.kubernetes.io/component: web
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tbz-sample-app
+        app.kubernetes.io/component: web
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ .Release.Name }}-tbz-sample-app
+      containers:
+        - name: web
+          image: "ghcr.io/shyim/adminerevo:latest"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DATABASE_URL
+              value: "postgres://magic-library-prod:N3U684dCm6tG@staging-tbz-sample-app-db:5432/magic-library-prod"
+            - name: ADMINER_DEFAULT_DRIVER
+              value: "pgsql"
+            - name: ADMINER_DEFAULT_SERVER
+              value: "{{ .Release.Name }}-tbz-sample-app-db"
+            - name: ADMINER_DEFAULT_USER
+              value: "magic-library-prod"
+            - name: ADMINER_DEFAULT_PASSWORD
+              value: "N3U684dCm6tG"
+            - name: ADMINER_DEFAULT_DB
+              value: "magic-library-prod"
+          resources:
+            limits:
+              cpu: "1"
+              memory: "512Mi"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http

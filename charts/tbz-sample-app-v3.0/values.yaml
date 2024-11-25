@@ -1,0 +1,44 @@
+# Default values for tbz-sample-app.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+web:
+
+  ingress:
+    enabled: true
+
+    ingressClassName: nginx-ingress
+    hostname: sample-app.example.com
+    issuerKind: ClusterIssuer
+    issuerName: example-issuer
+
+  database:
+    name: "example"
+    user: "username"
+    password: "password"
+    host: "example-service"
+    driver: "pgsql"
+
+  deployment: 
+    replicaCount: 1
+    image:
+      repository: "ghcr.io/shyim/adminerevo"
+      tag: "latest"
+
+  service: 
+    portNumber: 8000
+    type: "ClusterIP" 
+
+db:
+  enabled: true
+
+  deployment:
+    replicaCount: 1
+    image:
+      repository: docker.io/library/postgres
+      tag: "latest"
+
+  service: 
+    portNumber: 5432
+    type: "ClusterIP"
+
+

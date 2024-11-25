@@ -209,7 +209,7 @@ Falls ihr loops braucht, schaut euch die Dokumentation an, [das Beispiel](https:
 
 In unserem Beispiel machen wir die Datenbank optional, falls eine externe Datenbank verwendet wird.
 
-In unserem Fall verwenden wir die Variablen `.Values.db.enabled` und `.Values.web.enabled` in den Deployments und den Dervices. 
+In unserem Fall verwenden wir die Variablen `.Values.db.enabled` und `.Values.web.ingress.enabled` in Deployments, Services und dem Ingresses. 
 
 ## Abschliessendes
 

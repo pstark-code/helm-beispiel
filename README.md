@@ -9,7 +9,7 @@ Die Sektionen unten korrespondieren mit den Chart Versionen im `./charts` Ordner
 
 ## Helm CLI Benutzen
 
-Die Helm Chart kann mit dem folgenden Befehl installiert werden:
+Eine Helm Chart kann mit dem folgenden Befehl installiert werden:
 
 ```
 helm install --namespace=beispiel-namespace beispiel-releasename ./charts/tbz-sample-app
@@ -29,6 +29,18 @@ Um ein existierendes Deployment anzupassen, wird `helm upgrade` verwendet. Für 
 ```
 helm upgrade --install -n namespace --values=./environments/values-staging.yaml beispiel-releasename ./charts/tbz-sample-app
 ```
+
+## Eine Eigene Helm Chart Anlegen
+
+Ihr könnt eine der Beispiel Helm-Charts aus diesem Repository kopieren und für euch anpassen oder ihr könnt mit der Helm CLI eine neue Chart generieren:
+
+```
+helm create CHART_NAME
+```
+
+Während ihr die folgenden Abschnitte durchlest, vergleicht jeweils den Code aus den korrespondierenden Unterordnern im `./charts/` Verzeichnis. Und dann wendet das Gelernte auf eure Helm-Charts an.
+
+Viel Erfolg!
 
 ## 1. Vorgegebene Konfigurationsvariablen ("Builtin Objects")
 
